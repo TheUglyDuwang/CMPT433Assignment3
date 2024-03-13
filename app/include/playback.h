@@ -10,8 +10,11 @@ typedef struct {
 	short *pData;
 } wavedata_t;
 
+// Read in the file to dynamically allocated memory.
+// !! Client code must free memory in wavedata_t !!
 void Audio_readWaveFileIntoMemory(char *fileName, wavedata_t *pWaveStruct);
 
-void Audio_playfile(snd_pcm_t *handle, wavedata_t *pWaveData);
+// Play the audio file (blocking)
+void Audio_playFile(snd_pcm_t *handle, wavedata_t *pWaveData);
 
 #endif
