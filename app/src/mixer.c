@@ -159,8 +159,13 @@ void AudioMixer_queueSound(wavedata_t *pSound)
 	 *    not being able to play another wave file.
 	 */
 
+
+	//create thread lock
+	//set a bool slotFound. if there is an empty spot it adds the sound and then sets slot found to true.
+	//if slot found is false (0) then it prints no empty slots
 	pthread_mutex_lock(&audioMutex);
 	int slotFound = 0;
+	
 	for (int i = 0; i < MAX_SOUND_BITES; i++){
 		if (soundBites[i].pSound == NULL){
 			soundBites[i].pSound = pSound;
@@ -170,7 +175,7 @@ void AudioMixer_queueSound(wavedata_t *pSound)
 		}
 	}
 
-	if(slotFound == 1){
+	if(slotFound == 0){
 		printf("No empty slots\n");
 		
 	}
@@ -291,11 +296,38 @@ static void fillPlaybackBuffer(short *buff, int size)
 	 *          ... use someNum vs myArray[someIdx].value;
 	 *
 	 */
+	memset(buff, 0, size * sizeof(short));
+
+	pthread_mutex_loc(&audioMutex);
+
+	wavedata_t *audio;
+	int loc;
+	int index = 0;
+
+	for(int i = 0; i < MAX_SOUND_BITES; i++){
+		if(soundBites[i].pSound != NULL){
+			audio = soundBites[i].pSound;
+			loc = soundBites[i].location;
+			index = 0;
+			while(index < size && loc < audio->numSamples){
+				
+				buff[index] = buff[index] + audio->pData[loc];
+
+				loc++;
+				index++;
+			}
+			soundBites[i].location = loc;
+
+			if(audio->numSamples <= loc){
+				soundBites[i].pSound = NULL;
+				soundBites[i].location = 0;
+			}
+		}
+	}
 
 
 
-
-
+	pthread_mutex_unlock(&audioMutex);
 
 
 }
