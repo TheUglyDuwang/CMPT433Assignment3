@@ -1,4 +1,4 @@
-#include <alsa/asoundlib.h>
+#include "playback.h"
 
 // File used for play-back:
 // If cross-compiling, must have this file available, via this relative path,
@@ -10,13 +10,6 @@
 #define SAMPLE_RATE   44100
 #define NUM_CHANNELS  1
 #define SAMPLE_SIZE   (sizeof(short)) 	// bytes per sample
-
-// Store data of a single wave file read into memory.
-// Space is dynamically allocated; must be freed correctly!
-typedef struct {
-	int numSamples;
-	short *pData;
-} wavedata_t;
 
 // Read in the file to dynamically allocated memory.
 // !! Client code must free memory in wavedata_t !!
