@@ -52,7 +52,10 @@ void AudioMixer_init(void)
 	// Initialize the currently active sound-bites being played
 	// REVISIT:- Implement this. Hint: set the pSound pointer to NULL for each
 	//     sound bite.
-
+	for(int i = 0; i < MAX_SOUND_BITES; i++){
+		soundBites[i].pSound = NULL;
+		soundBites[i].location = 0;
+	}
 
 
 
@@ -156,7 +159,23 @@ void AudioMixer_queueSound(wavedata_t *pSound)
 	 *    not being able to play another wave file.
 	 */
 
+	pthread_mutex_lock(&audioMutex);
+	int slotFound = 0;
+	for (int i = 0; i < MAX_SOUND_BITES; i++){
+		if (soundBites[i].pSound == NULL){
+			soundBites[i].pSound = pSound;
+			soundBites[i].location = 0;
+			slotFound = 1;
+			break;
+		}
+	}
 
+	if(slotFound == 1){
+		printf("No empty slots\n");
+		
+	}
+
+	pthread_mutex_unlock(&audioMutex);
 
 
 
