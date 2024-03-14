@@ -5,7 +5,7 @@
 // If cross-compiling, must have this file available, via this relative path,
 // on the target when the application is run. This example's Makefile copies the wave-files/
 // folder along with the executable to ensure both are present.
-#define SOURCE_FILE "audio/100060__menegass__gui-drum-splash-hard.wav"
+#define SOURCE_FILE "audio/100060__menegass__gui-drum-splash-hard.wav" //edit this for the file that should be played
 //#define SOURCE_FILE "wave-files/100053__menegass__gui-drum-cc.wav"
 
 #define SAMPLE_SIZE   (sizeof(short)) 	// bytes per sample
