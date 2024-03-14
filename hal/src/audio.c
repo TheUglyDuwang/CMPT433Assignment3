@@ -1,5 +1,4 @@
-#include <alsa/asoundlib.h>
-
+#include "audio.h"
 
 #define SAMPLE_RATE   44100
 #define NUM_CHANNELS  1
