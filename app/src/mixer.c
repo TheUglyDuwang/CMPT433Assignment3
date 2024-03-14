@@ -2,6 +2,8 @@
 // which are left as incomplete.
 // Note: Generates low latency audio on BeagleBone Black; higher latency found on host.
 #include "mixer.h"
+#include "audio.h"
+#include "playback.h"
 #include <alsa/asoundlib.h>
 #include <stdbool.h>
 #include <pthread.h>
@@ -57,27 +59,7 @@ void AudioMixer_init(void)
 		soundBites[i].location = 0;
 	}
 
-
-
-	// Open the PCM output
-	int err = snd_pcm_open(&handle, "default", SND_PCM_STREAM_PLAYBACK, 0);
-	if (err < 0) {
-		printf("Playback open error: %s\n", snd_strerror(err));
-		exit(EXIT_FAILURE);
-	}
-
-	// Configure parameters of PCM output
-	err = snd_pcm_set_params(handle,
-			SND_PCM_FORMAT_S16_LE,
-			SND_PCM_ACCESS_RW_INTERLEAVED,
-			NUM_CHANNELS,
-			SAMPLE_RATE,
-			1,			// Allow software resampling
-			50000);		// 0.05 seconds per buffer
-	if (err < 0) {
-		printf("Playback open error: %s\n", snd_strerror(err));
-		exit(EXIT_FAILURE);
-	}
+	handle = Audio_openDevice();
 
 	// Allocate this software's playback buffer to be the same size as the
 	// the hardware's playback buffers for efficient data transfers.
@@ -95,41 +77,7 @@ void AudioMixer_init(void)
 // Client code must call AudioMixer_freeWaveFileData to free dynamically allocated data.
 void AudioMixer_readWaveFileIntoMemory(char *fileName, wavedata_t *pSound)
 {
-	assert(pSound);
-
-	// The PCM data in a wave file starts after the header:
-	const int PCM_DATA_OFFSET = 44;
-
-	// Open the wave file
-	FILE *file = fopen(fileName, "r");
-	if (file == NULL) {
-		fprintf(stderr, "ERROR: Unable to open file %s.\n", fileName);
-		exit(EXIT_FAILURE);
-	}
-
-	// Get file size
-	fseek(file, 0, SEEK_END);
-	int sizeInBytes = ftell(file) - PCM_DATA_OFFSET;
-	pSound->numSamples = sizeInBytes / SAMPLE_SIZE;
-
-	// Search to the start of the data in the file
-	fseek(file, PCM_DATA_OFFSET, SEEK_SET);
-
-	// Allocate space to hold all PCM data
-	pSound->pData = malloc(sizeInBytes);
-	if (pSound->pData == 0) {
-		fprintf(stderr, "ERROR: Unable to allocate %d bytes for file %s.\n",
-				sizeInBytes, fileName);
-		exit(EXIT_FAILURE);
-	}
-
-	// Read PCM data from wave file into memory
-	int samplesRead = fread(pSound->pData, SAMPLE_SIZE, pSound->numSamples, file);
-	if (samplesRead != pSound->numSamples) {
-		fprintf(stderr, "ERROR: Unable to read %d samples from file %s (read %d).\n",
-				pSound->numSamples, fileName, samplesRead);
-		exit(EXIT_FAILURE);
-	}
+	AudioMixer_readWaveFileIntoMemory(fileName, pSound);
 }
 
 void AudioMixer_freeWaveFileData(wavedata_t *pSound)
@@ -340,6 +288,8 @@ void* playbackThread(void* arg)
 		// Generate next block of audio
 		fillPlaybackBuffer(playbackBuffer, playbackBufferSize);
 
+
+		//couldn't the rest of this just be calling Audio_playFile from playback.c?
 
 		// Output the audio
 		snd_pcm_sframes_t frames = snd_pcm_writei(handle,

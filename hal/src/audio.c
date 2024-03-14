@@ -1,3 +1,9 @@
+#include <alsa/asoundlib.h>
+
+
+#define SAMPLE_RATE   44100
+#define NUM_CHANNELS  1
+
 // Open the PCM audio output device and configure it.
 // Returns a handle to the PCM device; needed for other actions.
 snd_pcm_t *Audio_openDevice()

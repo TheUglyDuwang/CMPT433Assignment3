@@ -1,12 +1,9 @@
 // Playback sounds in real time, allowing multiple simultaneous wave files
 // to be mixed together and played without jitter.
+#include "playback.h"
+
 #ifndef AUDIO_MIXER_H
 #define AUDIO_MIXER_H
-
-typedef struct {
-	int numSamples;
-	short *pData;
-} wavedata_t;
 
 #define AUDIOMIXER_MAX_VOLUME 100
 
