@@ -1,0 +1,7 @@
+{
+  "type":"module",
+  "dependencies": {
+    "mime": "^4.0.1",
+    "node.js": "^0.0.1-security"
+  }
+}

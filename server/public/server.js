@@ -1,10 +1,12 @@
 "use strict"
 
+import mime from 'mime';
 import http from 'http';
 import fs from 'fs';
-import mime from mime;
-import path from path;
+import path from 'path';
 
+var volume = 80;
+var bpm = 120;
 
 var server = http.createServer(function(request, response){
     var filePath = false;
@@ -57,4 +59,36 @@ function noError(){
 
 function connectError(){
     document.getElementById('error-box').style.visibility = "visible";
+}
+
+function incrementVolume(){
+    volume = volume + 5;
+    if(volume > 100){
+        volume = 100;
+    }
+    document.getElementById("volumeid").innerHTML = volume;
+}
+
+function decrimentVolume(){
+    volume = volume - 5;
+    if(volume < 0){
+        volume = 0;
+    }
+    document.getElementById("volumeid").innerHTML = volume;
+}
+
+function incrementBPM(){
+    bpm = bpm + 5;
+    if(volume > 300){
+        bpm = 300;
+    }
+    //document.getElementById("volumeid").innerHTML = volume;
+}
+
+function decrimentBPM(){
+    bpm = bpm - 5;
+    if(volume < 40){
+        bpm = 40;
+    }
+    //document.getElementById("volumeid").innerHTML = volume;
 }
