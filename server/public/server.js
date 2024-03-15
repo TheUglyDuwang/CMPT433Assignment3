@@ -1,3 +1,5 @@
+"use strict"
+
 import http from 'http';
 import fs from 'fs';
 import mime from mime;
@@ -47,4 +49,12 @@ function sendFile(response, filePath, fileContents){
         {"content-type": mime.lookup(path.basename(filePath))}
     );
     response.end(fileContents);
+}
+
+function noError(){
+    document.getElementById('error-box').style.visibility = "hidden";
+}
+
+function connectError(){
+    document.getElementById('error-box').style.visibility = "visible";
 }
