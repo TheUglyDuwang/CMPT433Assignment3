@@ -15,10 +15,6 @@ exports.listen = function(server){
 
 function handleCommand(socket){
 
-    socket.on('fetchVol', function(data){
-        socket.emit('vol', volume);
-    });
-
 	socket.on('daUdpCommand', function(data) {
 		console.log('daUdpCommand command: ' + data);
 
@@ -56,14 +52,14 @@ function handleCommand(socket){
     });
 
 
-/*
+
     socket.on('changeVolume', function(changeAmount){
         if(changeAmount > 0){
             incrementVolume();
         }else{
             decrimentVolume();
         }
-        socket.emit('newVol', volume);
+        socket.emit('vol', volume);
     });
     socket.on('changeTempo', function(changeAmount){
         if(changeAmount > 0){
@@ -71,14 +67,14 @@ function handleCommand(socket){
         }else{
             decrimentBPM();
         }
-        socket.emit('newBPM', volume);
+        socket.emit('bpm', bpm);
     });
     socket.on('getVol', function(){
         socket.emit('vol', volume);
     });
     socket.on('getBPM', function(){
         socket.emit('bpm', bpm);
-    });*/
+    });
 }
 
 function incrementVolume(){

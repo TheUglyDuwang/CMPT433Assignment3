@@ -4,7 +4,10 @@ $(document).ready(function() {
         console.log("volume = " + result);
         document.getElementById('volumeid').setAttribute('value', result);
 	});
-	socket.emit('fetchVol', "");
+    socket.on('bpm', function(result){
+        document.getElementById('tempoid').setAttribute('value', result);
+    });
+	socket.emit('getVol', "");
 });
 
 function sendCommandViaUDP(message) {
@@ -13,22 +16,13 @@ function sendCommandViaUDP(message) {
 
 function update(){
     socket.emit('getVol');
-    socket.on('vol', function(result){
-        document.getElementById('volumeid').setAttribute('value', result);
-    });
     socket.emit('getBPM');
-    socket.on('bpm', function(result){
-        document.getElementById('tempoid').setAttribute('value', result);
-    })
 }
 
 setInterval(update(), 500);
 
 function addVol(){
     socket.emit('changeVolume', 5);
-    socket.on('newVol', function(result){
-        document.getElementById('volumeid').setAttribute('value', result);
-    });
 }
 
 function subVol(){
