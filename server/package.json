@@ -1,7 +1,8 @@
 {
-  "type":"module",
+  "type": "module",
   "dependencies": {
     "mime": "^4.0.1",
-    "node.js": "^0.0.1-security"
+    "node.js": "^0.0.1-security",
+    "socket.io": "^4.7.5"
   }
 }
