@@ -5,7 +5,6 @@ import http from 'http';
 import fs from 'fs';
 import path from 'path';
 
-
 var server = http.createServer(function(request, response){
     var filePath = false;
     if(request.url == '/'){
@@ -60,7 +59,5 @@ function connectError(){
     document.getElementById('error-box').style.visibility = "visible";
 }
 
-function updateVolume(){
-    //get the volume via UDP/socket
-    setVolume();
-}
+var dataManip = require('./lib/dataManip');
+dataManip.listen(server);

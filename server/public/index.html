@@ -5,7 +5,7 @@
 	<title>BeagleBone Beat-Box</title>
 	<meta charset="UTF-8">
 	<link rel='stylesheet' href='stylesheets/style.css'></link>
-	<script src="client.js" type="text/javascript"></script>
+	<script src="lib/client.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -32,18 +32,18 @@
 				</p>
 				<h3>Volume</h3>
 				<p>
-					<input type="button" id="volumeDown" value=" - " onclick="decrimentVolume()"/>
+					<input type="button" id="volumeDown" value=" - " onclick="subVol()"/>
 					<input type="text"   id="volumeid" value="80" size="3" readonly/>
-					<input type="button" id="volumeUp" value=" + " onclick="incrementVolume()"/>
+					<input type="button" id="volumeUp" value=" + " onclick="addVol()"/>
 					(0 - 100)
 				</p>
 			</div>
 			
 			<h3>Tempo</h3>
 			<p>
-				<input type="button" id="tempoDown" value=" - " onclick="decrimentBPM()"/>
+				<input type="button" id="tempoDown" value=" - " onclick="subTempo()"/>
 				<input type="text"   id="tempoid" value="120" size="3" readonly/>
-				<input type="button" id="tempoUp" value=" + " onclick="incrementBPM()"/>
+				<input type="button" id="tempoUp" value=" + " onclick="addTempo()"/>
 				(0 - 100)
 			</p>
 
