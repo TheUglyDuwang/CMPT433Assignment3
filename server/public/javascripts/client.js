@@ -1,4 +1,15 @@
 var socket = io.connect();
+$(document).ready(function() {
+	socket.on('vol', function(result) {
+        console.log("volume = " + result);
+        document.getElementById('volumeid').setAttribute('value', result);
+	});
+	socket.emit('fetchVol', "");
+});
+
+function sendCommandViaUDP(message) {
+	socket.emit('daUdpCommand', message);
+};
 
 function update(){
     socket.emit('getVol');

@@ -1,8 +1,10 @@
 {
-  "type": "module",
+  "name" : "assignment-3",
+  "version" : "0.0.3",
+  "description": "a3",
   "dependencies": {
-    "mime": "^4.0.1",
+    "mime": "1.2.7",
     "node.js": "^0.0.1-security",
-    "socket.io": "^4.7.5"
+    "socket.io": "~0.9.6"
   }
 }
