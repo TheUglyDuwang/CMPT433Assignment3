@@ -2,7 +2,6 @@ var socketio = require('socket.io');
 
 var dgram = require('dgram');
 
-
 var volume = 80;
 var bpm = 120;
 
