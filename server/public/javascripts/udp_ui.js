@@ -1,7 +1,6 @@
 var socket = io.connect();
 $(document).ready(function() {
 	socket.on('vol', function(result) {
-        console.log("volume = " + result);
         document.getElementById('volumeid').setAttribute('value', result);
 	});
     socket.on('bpm', function(result){
@@ -19,7 +18,7 @@ function update(){
     socket.emit('getBPM');
 }
 
-setInterval(update(), 500);
+setInterval(update(), 100);
 
 function addVol(){
     socket.emit('changeVolume', 5);
