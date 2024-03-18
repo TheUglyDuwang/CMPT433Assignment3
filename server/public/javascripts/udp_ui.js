@@ -44,3 +44,15 @@ function subTempo(){
         document.getElementById('tempoid').setAttribute('value', result);
     })
 }
+
+function playHat(){
+    socket.emit('playHat', "");
+}
+
+function playSnare(){
+    socket.emit('playSnare', "");
+}
+
+function playBase(){
+    socket.emit('playBase', "");
+}

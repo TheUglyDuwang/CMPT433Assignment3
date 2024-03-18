@@ -104,3 +104,5 @@ function decrimentBPM(){
         bpm = 40;
     }
 }
+
+

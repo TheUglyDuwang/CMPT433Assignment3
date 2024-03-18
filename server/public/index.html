@@ -11,8 +11,6 @@
 		<h1>BeagleBone Beat-Box</h1>
 		<div>by Matt & Teg</div>
 
-		<p>This page is a partial solution to what's needed. You'll need to add some extra sections for tempo and triggering sounds via buttons.</p>
-
 		<div id='content'>
 			<div id='status-box'>
 				<h2>BeatBox's Status</h2>
@@ -42,6 +40,14 @@
 					<input type="button" id="tempoDown" value=" - " onclick="subTempo()" />
 					<input type="text" id="tempoid" value="120" size="3" readonly />
 					<input type="button" id="tempoUp" value=" + " onclick="addTempo()" />
+					(0 - 100)
+				</p>
+
+				<h3>Play Sounds</h3>
+				<p>
+					<input type="button" id="HiHat" value="Hi-Hat" onclick="playHat()" />
+					<input type="button" id="snare" value="Snare" onclick="playSnare()" />
+					<input type="button" id="base" value="Base" onclick="playBase()" />
 					(0 - 100)
 				</p>
 
