@@ -8,7 +8,7 @@
 #include <stdbool.h>
 #include <pthread.h>
 #include <limits.h>
-#include <alloca.h> // needed for mixer
+#include <alloca.h> 
 
 
 static snd_pcm_t *handle;
@@ -112,18 +112,18 @@ void AudioMixer_queueSound(wavedata_t *pSound)
 	//set a bool slotFound. if there is an empty spot it adds the sound and then sets slot found to true.
 	//if slot found is false (0) then it prints no empty slots
 	pthread_mutex_lock(&audioMutex);
-	int slotFound = 0;
+	bool slotFound = false;
 	
 	for (int i = 0; i < MAX_SOUND_BITES; i++){
 		if (soundBites[i].pSound == NULL){
 			soundBites[i].pSound = pSound;
 			soundBites[i].location = 0;
-			slotFound = 1;
+			slotFound = true;
 			break;
 		}
 	}
 
-	if(slotFound == 0){
+	if(slotFound == false){
 		printf("No empty slots\n");
 		
 	}
