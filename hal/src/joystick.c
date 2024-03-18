@@ -1,5 +1,4 @@
 #include "joystick.h"
-#include <cstdio>
 
 #define JSUP "/sys/class/gpio/gpio26/value" //filepath for press value of joystick
 #define JSRT "/sys/class/gpio/gpio47/value" ////1 is not pressed 0 is pressed
@@ -34,7 +33,7 @@ static enum JoystickDirection getDirection(void)
         return down;
     }   else if (readFromFileToScreen(JSLFT) == 0){
         return left;
-    } else if (readFromFileToSCreen(JSPB) == 1){
+    } else if (readFromFileToSCreen(JSPB) == 0){
         return pushed;
     } else{
         return none;

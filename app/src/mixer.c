@@ -47,6 +47,8 @@ static pthread_mutex_t audioMutex = PTHREAD_MUTEX_INITIALIZER;
 
 static int volume = 0;
 
+
+
 void AudioMixer_init(void)
 {
 	AudioMixer_setVolume(DEFAULT_VOLUME);
@@ -54,7 +56,8 @@ void AudioMixer_init(void)
 	// Initialize the currently active sound-bites being played
 	// REVISIT:- Implement this. Hint: set the pSound pointer to NULL for each
 	//     sound bite.
-	for(int i = 0; i < MAX_SOUND_BITES; i++){
+
+	for (int i = 0; i < MAX_SOUND_BITES; i++ ){
 		soundBites[i].pSound = NULL;
 		soundBites[i].location = 0;
 	}
@@ -77,7 +80,7 @@ void AudioMixer_init(void)
 // Client code must call AudioMixer_freeWaveFileData to free dynamically allocated data.
 void AudioMixer_readWaveFileIntoMemory(char *fileName, wavedata_t *pSound)
 {
-	AudioMixer_readWaveFileIntoMemory(fileName, pSound);
+	Audio_readWaveFileIntoMemory(fileName, pSound);
 }
 
 void AudioMixer_freeWaveFileData(wavedata_t *pSound)
@@ -107,15 +110,13 @@ void AudioMixer_queueSound(wavedata_t *pSound)
 	 *    not being able to play another wave file.
 	 */
 
-
-	//create thread lock
-	//set a bool slotFound. if there is an empty spot it adds the sound and then sets slot found to true.
-	//if slot found is false (0) then it prints no empty slots
 	pthread_mutex_lock(&audioMutex);
 	bool slotFound = false;
-	
-	for (int i = 0; i < MAX_SOUND_BITES; i++){
-		if (soundBites[i].pSound == NULL){
+
+	for(int i = 0 ; i < MAX_SOUND_BITES ; i++ ){
+		
+		if( soundBites[i].pSound == NULL){
+
 			soundBites[i].pSound = pSound;
 			soundBites[i].location = 0;
 			slotFound = true;
@@ -125,10 +126,10 @@ void AudioMixer_queueSound(wavedata_t *pSound)
 
 	if(slotFound == false){
 		printf("No empty slots\n");
-		
 	}
 
 	pthread_mutex_unlock(&audioMutex);
+
 
 
 
@@ -170,7 +171,7 @@ int AudioMixer_getVolume()
 void AudioMixer_setVolume(int newVolume)
 {
 	// Ensure volume is reasonable; If so, cache it for later getVolume() calls.
-	if (newVolume < 0 || newVolume > AUDIOMIXER_MAX_VOLUME) {
+	if (newVolume < 0 || newVolume > 100) {
 		printf("ERROR: Volume must be between 0 and 100.\n");
 		return;
 	}
@@ -244,9 +245,10 @@ static void fillPlaybackBuffer(short *buff, int size)
 	 *          ... use someNum vs myArray[someIdx].value;
 	 *
 	 */
+	
 	memset(buff, 0, size * sizeof(short));
 
-	pthread_mutex_loc(&audioMutex);
+	pthread_mutex_lock(&audioMutex);
 
 	wavedata_t *audio;
 	int loc;
@@ -257,9 +259,18 @@ static void fillPlaybackBuffer(short *buff, int size)
 			audio = soundBites[i].pSound;
 			loc = soundBites[i].location;
 			index = 0;
-			while(index < size && loc < audio->numSamples){
+			while(index < size && loc + index < audio->numSamples){
+
+				int sound = buff[index] + audio->pData[loc];
+
+				if(sound<SHRT_MIN){
+					sound = SHRT_MIN;
+				}
+				if(sound>SHRT_MAX){
+					sound = SHRT_MAX;
+				}
 				
-				buff[index] = buff[index] + audio->pData[loc];
+				buff[index] = sound;
 
 				loc++;
 				index++;
@@ -273,11 +284,7 @@ static void fillPlaybackBuffer(short *buff, int size)
 		}
 	}
 
-
-
 	pthread_mutex_unlock(&audioMutex);
-
-
 }
 
 
@@ -288,8 +295,6 @@ void* playbackThread(void* arg)
 		// Generate next block of audio
 		fillPlaybackBuffer(playbackBuffer, playbackBufferSize);
 
-
-		//couldn't the rest of this just be calling Audio_playFile from playback.c?
 
 		// Output the audio
 		snd_pcm_sframes_t frames = snd_pcm_writei(handle,
@@ -313,18 +318,3 @@ void* playbackThread(void* arg)
 
 	return NULL;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
