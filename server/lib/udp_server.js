@@ -51,8 +51,6 @@ function handleCommand(socket){
 		});
     });
 
-
-
     socket.on('changeVolume', function(changeAmount){
         if(changeAmount > 0){
             incrementVolume();
@@ -104,3 +102,30 @@ function decrimentBPM(){
         bpm = 40;
     }
 }
+
+function recNewVol(newVol){
+    volume = newVol;
+    socketio.emit('vol', volume);
+}
+
+function recNewBPM(newBPM){
+    bpm = newBPM;
+    socketio.emit('bpm', bpm);
+}
+
+const cDgram = require('node:dgram');
+const cServer = cDgram.createSocket('udp4');
+
+cServer.on('v', function(data){
+    var vol = parseInt(data);
+    recNewVol(vol);
+});
+
+cServer.on('b', function(data){
+    var tempo = parseInt(data);
+    recNewBPM(tempo);
+});
+
+cServer.bind(8089);
+
+//setInterval(2000, cServer.emit('1', '1'));
